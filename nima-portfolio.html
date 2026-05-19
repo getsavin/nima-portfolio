@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nima P S – Structural Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #080c14;
+  --surface: #0d1420;
+  --surface2: #111826;
+  --border: rgba(99,179,237,0.15);
+  --accent: #63b3ed;
+  --accent2: #f6ad55;
+  --accent3: #68d391;
+  --text: #e2e8f0;
+  --muted: #718096;
+  --grid: rgba(99,179,237,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'DM Sans',sans-serif;font-weight:300;
+  line-height:1.7;overflow-x:hidden;cursor:none;
+}
+
+/* CUSTOM CURSOR */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(99,179,237,0.5);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width 0.25s,height 0.25s,border-color 0.3s;
+}
+#cursor-ring.hovered{width:54px;height:54px;border-color:var(--accent2);}
+
+/* BLUEPRINT GRID */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* PARTICLE CANVAS */
+#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.7;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.2rem 3rem;
+  backdrop-filter:blur(20px);
+  background:rgba(8,12,20,0.85);
+  border-bottom:1px solid var(--border);
+  animation:slideDown 0.7s 0.1s both;
+}
+@keyframes slideDown{
+  from{transform:translateY(-100%);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  letter-spacing:0.15em;color:var(--accent);
+}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  font-weight:300;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  position:relative;transition:color 0.3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:-3px;
+  width:0;height:1px;background:var(--accent);
+  transition:width 0.3s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+
+section{position:relative;z-index:1;}
+
+/* ─── HERO ─── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:8rem 3rem 4rem;
+  max-width:1300px;margin:0 auto;
+}
+.hero-tag{
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+  font-weight:300;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp 0.8s 0.3s forwards;
+  display:flex;align-items:center;gap:0.8rem;
+}
+.hero-tag::before{content:'';display:block;width:40px;height:1px;background:var(--accent);}
+
+.hero-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4.5rem,12vw,11rem);
+  line-height:0.9;letter-spacing:-0.01em;color:var(--text);
+  opacity:0;animation:fadeUp 0.9s 0.45s forwards;
+}
+.hero-name .accent{color:var(--accent);}
+
+/* GLITCH */
+.glitch{position:relative;display:inline-block;}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;
+  font-family:'Bebas Neue',sans-serif;font-size:inherit;
+  line-height:inherit;color:inherit;
+}
+.glitch::before{
+  color:#f6ad55;
+  clip-path:polygon(0 0,100% 0,100% 38%,0 38%);
+  animation:glitch1 5s infinite;left:3px;
+}
+.glitch::after{
+  color:#63b3ed;
+  clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);
+  animation:glitch2 5s infinite;left:-3px;
+}
+@keyframes glitch1{
+  0%,88%,100%{transform:translate(0);opacity:1;}
+  89%{transform:translate(-4px,-2px);opacity:0.8;}
+  91%{transform:translate(3px,1px);}
+  93%{transform:translate(-2px,0);}
+  95%{transform:translate(0);opacity:1;}
+}
+@keyframes glitch2{
+  0%,88%,100%{transform:translate(0);opacity:1;}
+  90%{transform:translate(4px,2px);opacity:0.8;}
+  92%{transform:translate(-3px,-1px);}
+  94%{transform:translate(2px,0);}
+  95%{transform:translate(0);opacity:1;}
+}
+
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.8rem,4vw,3.5rem);
+  letter-spacing:0.08em;color:var(--muted);margin-top:0.5rem;
+  opacity:0;animation:fadeUp 0.9s 0.6s forwards;
+}
+.hero-desc{
+  max-width:600px;margin-top:2rem;
+  color:var(--muted);font-size:1rem;line-height:1.8;
+  opacity:0;animation:fadeUp 0.9s 0.75s forwards;
+}
+.hero-cta{
+  display:flex;gap:1rem;margin-top:2.5rem;
+  opacity:0;animation:fadeUp 0.9s 0.9s forwards;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.75rem 1.8rem;
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;border-radius:2px;
+  transition:all 0.35s;cursor:none;
+  position:relative;overflow:hidden;
+}
+.btn::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,0.08);
+  transform:translateX(-100%);
+  transition:transform 0.4s ease;
+}
+.btn:hover::after{transform:translateX(0);}
+.btn-primary{background:var(--accent);color:#080c14;font-weight:400;border:1px solid var(--accent);}
+.btn-primary:hover{background:transparent;color:var(--accent);}
+.btn-outline{background:transparent;color:var(--accent);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--accent);}
+
+.hero-stats{
+  display:flex;gap:3rem;margin-top:4rem;
+  padding-top:2.5rem;border-top:1px solid var(--border);
+  opacity:0;animation:fadeUp 0.9s 1.05s forwards;
+}
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;font-size:2.5rem;
+  color:var(--accent);line-height:1;
+}
+.stat-label{
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-top:0.3rem;
+}
+
+/* SCROLL INDICATOR */
+.scroll-ind{
+  position:absolute;bottom:2rem;right:3rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  opacity:0;animation:fadeUp 1s 1.4s forwards;
+}
+.scroll-ind span{
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);writing-mode:vertical-rl;
+}
+.scroll-line{
+  width:1px;height:60px;
+  background:linear-gradient(to bottom,var(--accent),transparent);
+  animation:scrollPulse 2s infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{opacity:0.4;transform:scaleY(1);}
+  50%{opacity:1;transform:scaleY(1.2);}
+}
+
+/* CONTENT WRAPPER */
+.content-wrap{max-width:1300px;margin:0 auto;padding:0 3rem;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:flex-end;gap:1.5rem;margin-bottom:4rem;}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.4rem;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);letter-spacing:0.04em;line-height:1;}
+.sec-line{flex:1;height:1px;background:var(--border);margin-bottom:0.6rem;}
+
+/* ─── EXPERIENCE ─── */
+#experience{padding:7rem 0;}
+.exp-grid{display:grid;gap:1.5px;}
+.exp-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:2.5rem 2.5rem 2.5rem 3rem;
+  position:relative;overflow:hidden;
+  transition:border-color 0.35s,transform 0.4s ease,box-shadow 0.35s;
+  transform-style:preserve-3d;will-change:transform;
+}
+.exp-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--accent);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform 0.4s ease;
+}
+.exp-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 20%,rgba(99,179,237,0.04) 50%,transparent 80%);
+  transform:translateX(-120%);
+  transition:transform 0.7s ease;pointer-events:none;
+}
+.exp-card:hover{border-color:rgba(99,179,237,0.35);box-shadow:0 0 50px rgba(99,179,237,0.07);}
+.exp-card:hover::before{transform:scaleY(1);}
+.exp-card:hover::after{transform:translateX(120%);}
+
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+.exp-role{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--text);}
+.exp-company{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent2);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.25rem;}
+.exp-period{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;background:var(--surface2);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:2px;white-space:nowrap;}
+.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
+.exp-bullets li{
+  font-size:0.92rem;color:var(--muted);padding-left:1.2rem;
+  position:relative;line-height:1.6;transition:color 0.3s,transform 0.3s;
+}
+.exp-bullets li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:0.75rem;top:0.1rem;}
+.exp-card:hover .exp-bullets li{color:#a0aec0;}
+.exp-card:hover .exp-bullets li:nth-child(1){transition-delay:0.04s;}
+.exp-card:hover .exp-bullets li:nth-child(2){transition-delay:0.08s;}
+.exp-card:hover .exp-bullets li:nth-child(3){transition-delay:0.12s;}
+.exp-card:hover .exp-bullets li:nth-child(4){transition-delay:0.16s;}
+.exp-card:hover .exp-bullets li:nth-child(5){transition-delay:0.20s;}
+
+.exp-projects{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.exp-proj-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent3);margin-bottom:0.8rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.proj-tag{
+  font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+  color:var(--text);background:rgba(104,211,145,0.07);
+  border:1px solid rgba(104,211,145,0.2);
+  padding:0.3rem 0.8rem;border-radius:2px;letter-spacing:0.04em;
+  transition:background 0.3s,border-color 0.3s,transform 0.2s;
+}
+.proj-tag:hover{background:rgba(104,211,145,0.15);border-color:rgba(104,211,145,0.5);transform:translateY(-2px);}
+
+/* ─── SKILLS ─── */
+#skills{padding:7rem 0;background:var(--surface);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5px;}
+.skill-group{
+  background:var(--bg);border:1px solid var(--border);padding:2rem;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.skill-group:hover{border-color:rgba(99,179,237,0.35);box-shadow:0 0 24px rgba(99,179,237,0.05);}
+.skill-group-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;}
+.skill-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.skill-name{font-size:0.88rem;color:var(--text);}
+.skill-bar-wrap{width:90px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-bar{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:2px;width:0;
+  transition:width 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+.skill-bar.animated{width:var(--target);}
+.skill-level{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.08em;margin-top:2px;text-align:right;}
+
+.competencies{margin-top:1.5px;}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5px;}
+.comp-item{
+  background:var(--bg);border:1px solid var(--border);
+  padding:1.2rem 1.5rem;font-size:0.88rem;color:var(--muted);
+  transition:all 0.3s;display:flex;align-items:center;gap:0.6rem;
+  position:relative;overflow:hidden;
+}
+.comp-item::before{content:'◆';color:var(--accent);font-size:0.5rem;flex-shrink:0;transition:transform 0.35s,color 0.3s;}
+.comp-item:hover{color:var(--text);border-color:rgba(99,179,237,0.35);transform:translateY(-2px);}
+.comp-item:hover::before{transform:rotate(45deg);color:var(--accent2);}
+
+/* ─── EDUCATION ─── */
+#education{padding:7rem 0;}
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;}
+.edu-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:2.5rem;
+  transition:border-color 0.35s,box-shadow 0.35s,transform 0.4s ease;
+  position:relative;overflow:hidden;
+  transform-style:preserve-3d;will-change:transform;
+}
+.edu-card::after{
+  content:attr(data-degree);
+  position:absolute;bottom:-10px;right:-10px;
+  font-family:'Bebas Neue',sans-serif;font-size:5rem;
+  color:rgba(99,179,237,0.04);line-height:1;
+  pointer-events:none;letter-spacing:-0.02em;
+  transition:color 0.4s,transform 0.4s;
+}
+.edu-card:hover{border-color:rgba(99,179,237,0.35);box-shadow:0 0 40px rgba(99,179,237,0.07);}
+.edu-card:hover::after{color:rgba(99,179,237,0.09);transform:scale(1.08);}
+.edu-degree{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.04em;color:var(--text);margin-bottom:0.4rem;}
+.edu-field{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem;}
+.edu-inst{font-size:0.9rem;color:var(--muted);margin-bottom:0.5rem;}
+.edu-year{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;}
+.edu-cgpa{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.cgpa-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--accent);line-height:1;}
+.cgpa-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.2rem;}
+.sem-chips{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.8rem;}
+.sem-chip{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--accent3);background:rgba(104,211,145,0.07);border:1px solid rgba(104,211,145,0.2);padding:0.25rem 0.6rem;border-radius:2px;letter-spacing:0.05em;}
+
+/* ─── CONTACT ─── */
+#contact{padding:7rem 0;background:var(--surface);}
+.contact-centered{max-width:760px;margin:0 auto;text-align:center;}
+.contact-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4.5rem);line-height:0.95;margin-bottom:1.2rem;}
+.contact-heading span{color:var(--accent);}
+.contact-sub{color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:2.5rem;}
+.contact-items{display:flex;flex-wrap:wrap;justify-content:center;gap:1.2rem;}
+.contact-item{
+  display:flex;align-items:center;gap:0.9rem;
+  font-size:0.9rem;color:var(--muted);text-decoration:none;
+  border:1px solid var(--border);padding:0.9rem 1.5rem;
+  border-radius:2px;transition:all 0.35s;
+  background:var(--bg);position:relative;overflow:hidden;
+}
+.contact-item::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(99,179,237,0.06),transparent);
+  opacity:0;transition:opacity 0.35s;
+}
+.contact-item:hover::before{opacity:1;}
+.contact-item:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 32px rgba(99,179,237,0.1);}
+.c-icon{font-size:1.1rem;line-height:1;}
+.contact-item-text{display:flex;flex-direction:column;text-align:left;}
+.contact-item-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+.contact-item-val{font-size:0.88rem;color:var(--text);transition:color 0.3s;}
+.contact-item:hover .contact-item-val{color:var(--accent);}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:2rem 3rem;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:1;flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;}
+.footer-langs{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.lang-badge{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--muted);border:1px solid var(--border);padding:0.2rem 0.5rem;letter-spacing:0.06em;transition:border-color 0.3s,color 0.3s;}
+.lang-badge:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ─── REVEAL ─── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 0.75s ease,transform 0.75s ease;}
+.reveal.from-left{transform:translateX(-44px);}
+.reveal.from-right{transform:translateX(44px);}
+.reveal.visible{opacity:1;transform:translate(0,0);}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;} .nav-links{display:none;}
+  #hero{padding:7rem 1.5rem 4rem;}
+  .content-wrap{padding:0 1.5rem;}
+  .edu-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:1.5rem;flex-wrap:wrap;}
+  footer{padding:1.5rem;}
+  .scroll-ind{display:none;}
+  body{cursor:auto;}
+  #cursor,#cursor-ring{display:none;}
+  .contact-items{flex-direction:column;align-items:stretch;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Nima P S</div>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div style="max-width:1300px;margin:0 auto;position:relative;">
+    <div class="hero-tag">Structural Engineer · Kerala, India</div>
+    <h1 class="hero-name">
+      <span class="glitch" data-text="NIMA">NIMA</span><br>
+      <span class="accent glitch" data-text="P S">P S</span>
+    </h1>
+    <div class="hero-title">Structural Engineer</div>
+    <p class="hero-desc">
+      3+ years of industry experience in structural design and analysis using Indian Standard (IS) and American (AISC/ASCE/ACI) codes. Currently completing M.Tech with a consistent 9.4+ CGPA. Proficient in STAAD Pro, ETABS, SAP2000, and AutoCAD.
+    </p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Get in Touch</a>
+      <a href="#experience" class="btn btn-outline">View Work</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num" data-target="3" data-suffix="+">0+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="30" data-suffix="+">0+</div>
+        <div class="stat-label">Projects Delivered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="9.4" data-suffix="+" data-float="true">0</div>
+        <div class="stat-label">CGPA (M.Tech)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="2" data-suffix="">0</div>
+        <div class="stat-label">Code Systems (IS + AISC)</div>
+      </div>
+    </div>
+    <div class="scroll-ind">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="content-wrap">
+    <div class="sec-header reveal">
+      <div>
+        <div class="sec-num">01 / Experience</div>
+        <h2 class="sec-title">Work History</h2>
+      </div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-card reveal from-left">
+        <div class="exp-header">
+          <div>
+            <div class="exp-role">Junior Structural Engineer</div>
+            <div class="exp-company">Thrissur District Labour Contract Co-operative Society</div>
+          </div>
+          <div class="exp-period">2022 – 2023</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Designed G+2 concrete buildings, footings, water tanks, and septic tanks per Indian Standard (IS) codes.</li>
+          <li>Designed steel buildings, fire escape staircases, gates, and structural connections per IS standards.</li>
+          <li>Performed analysis and design of columns, beams, slabs, foundations, and retaining walls using STAAD Pro.</li>
+          <li>Coordinated with architects, engineers, and contractors to ensure timely and accurate project delivery.</li>
+          <li>Prepared structural drawings for concrete and connection design.</li>
+        </ul>
+        <div class="exp-projects">
+          <div class="exp-proj-label">▸ Key Projects</div>
+          <div class="proj-tags">
+            <span class="proj-tag">COVID-19 Isolation Wards (50+ sites across Kerala – KIIFB)</span>
+            <span class="proj-tag">Life Mission Kerala Building, Poovachal (KIIFB)</span>
+            <span class="proj-tag">Sukumar Azheekode Smaraka Mandhiram</span>
+            <span class="proj-tag">Regional Science Center, Chalakudy – Fire Escape Stair</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal from-right">
+        <div class="exp-header">
+          <div>
+            <div class="exp-role">Junior Structural Engineer</div>
+            <div class="exp-company">Acero Structural Engineers Pvt. Ltd</div>
+          </div>
+          <div class="exp-period">2019 – 2021</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Performed static and wind analysis based on American Standard codes (AISC, ASCE, ACI, Florida Building Code).</li>
+          <li>Specialised in steel connection design and miscellaneous structural engineering (cage ladders, guard rails, cable rails) per OSHA guidelines.</li>
+          <li>Prepared precise engineering calculations for 30+ projects using RISA, STAAD Pro, TEDDS, and Enercalc.</li>
+          <li>Applied LRFD and ASD load calculation methods for structural design.</li>
+          <li>Reviewed and quality-assured engineering calculations using ACI codes, achieving high client satisfaction.</li>
+        </ul>
+        <div class="exp-projects">
+          <div class="exp-proj-label">▸ Methods &amp; Standards</div>
+          <div class="proj-tags">
+            <span class="proj-tag">AISC / ASCE / ACI</span>
+            <span class="proj-tag">Florida Building Code</span>
+            <span class="proj-tag">OSHA Guidelines</span>
+            <span class="proj-tag">LRFD &amp; ASD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="content-wrap">
+    <div class="sec-header reveal">
+      <div>
+        <div class="sec-num">02 / Skills</div>
+        <h2 class="sec-title">Technical Arsenal</h2>
+      </div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="skill-group-label">// Design Software</div>
+        <div class="skill-item"><span class="skill-name">AutoCAD</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:95%"></div></div><div class="skill-level">Advanced</div></div></div>
+        <div class="skill-item"><span class="skill-name">STAAD Pro</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:95%"></div></div><div class="skill-level">Advanced</div></div></div>
+        <div class="skill-item"><span class="skill-name">ETABS</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:90%"></div></div><div class="skill-level">Advanced</div></div></div>
+        <div class="skill-item"><span class="skill-name">SAP2000</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:90%"></div></div><div class="skill-level">Advanced</div></div></div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-label">// Analysis Tools</div>
+        <div class="skill-item"><span class="skill-name">RISA</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:70%"></div></div><div class="skill-level">Intermediate</div></div></div>
+        <div class="skill-item"><span class="skill-name">TEDDS</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:70%"></div></div><div class="skill-level">Intermediate</div></div></div>
+        <div class="skill-item"><span class="skill-name">Enercalc</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:70%"></div></div><div class="skill-level">Intermediate</div></div></div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-label">// Code Standards</div>
+        <div class="skill-item"><span class="skill-name">IS Codes</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:95%"></div></div><div class="skill-level">Expert</div></div></div>
+        <div class="skill-item"><span class="skill-name">AISC / ASCE</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:88%"></div></div><div class="skill-level">Proficient</div></div></div>
+        <div class="skill-item"><span class="skill-name">ACI Codes</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:85%"></div></div><div class="skill-level">Proficient</div></div></div>
+        <div class="skill-item"><span class="skill-name">OSHA</span><div><div class="skill-bar-wrap"><div class="skill-bar" style="--target:75%"></div></div><div class="skill-level">Working</div></div></div>
+      </div>
+    </div>
+    <div class="competencies reveal" style="margin-top:1.5px;">
+      <div class="comp-grid">
+        <div class="comp-item">Structural Analysis &amp; Design</div>
+        <div class="comp-item">Steel Connection Design</div>
+        <div class="comp-item">Concrete &amp; Foundation Design</div>
+        <div class="comp-item">Retaining Wall Design</div>
+        <div class="comp-item">Structural Drawings (AutoCAD)</div>
+        <div class="comp-item">IS &amp; AISC/ASCE/ACI Code Design</div>
+        <div class="comp-item">LRFD &amp; ASD Load Methods</div>
+        <div class="comp-item">Team Collaboration</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="content-wrap">
+    <div class="sec-header reveal">
+      <div>
+        <div class="sec-num">03 / Education</div>
+        <h2 class="sec-title">Academic Background</h2>
+      </div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card reveal from-left" data-degree="M.Tech">
+        <div class="edu-degree">M.Tech</div>
+        <div class="edu-field">Structural Engineering</div>
+        <div class="edu-inst">Govt. Engineering College, Thrissur</div>
+        <div class="edu-year">2024 – May 2026 (Completing)</div>
+        <div class="edu-cgpa">
+          <div class="cgpa-num">9.4+</div>
+          <div class="cgpa-label">Cumulative GPA / 10</div>
+          <div class="sem-chips">
+            <span class="sem-chip">S1: 9.44</span>
+            <span class="sem-chip">S2: 9.42</span>
+            <span class="sem-chip">S3: 10.00 ✦</span>
+          </div>
+        </div>
+      </div>
+      <div class="edu-card reveal from-right" data-degree="B.Tech">
+        <div class="edu-degree">B.Tech</div>
+        <div class="edu-field">Civil Engineering</div>
+        <div class="edu-inst">APJ Abdul Kalam Technological University</div>
+        <div class="edu-year">2015 – 2019</div>
+        <div class="edu-cgpa">
+          <div class="cgpa-num">9.08</div>
+          <div class="cgpa-label">Cumulative GPA / 10</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="content-wrap">
+    <div class="sec-header reveal">
+      <div>
+        <div class="sec-num">04 / Contact</div>
+        <h2 class="sec-title">Let's Connect</h2>
+      </div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="contact-centered reveal">
+      <div class="contact-heading">Open to <span>New</span> Opportunities</div>
+      <p class="contact-sub">
+        Currently completing M.Tech in Structural Engineering (May 2026). Available for challenging structural design roles — both IS and US code projects welcome.
+      </p>
+      <div class="contact-items">
+        <a href="tel:+919562964721" class="contact-item">
+          <div class="c-icon">📞</div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Phone</span>
+            <span class="contact-item-val">+91 9562964721</span>
+          </div>
+        </a>
+        <a href="mailto:ernimaps@gmail.com" class="contact-item">
+          <div class="c-icon">✉</div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Email</span>
+            <span class="contact-item-val">ernimaps@gmail.com</span>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/nima-p-s-0b7727178" target="_blank" class="contact-item">
+          <div class="c-icon" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:400;">in</div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">LinkedIn</span>
+            <span class="contact-item-val">nima-p-s-0b7727178</span>
+          </div>
+        </a>
+        <div class="contact-item" style="pointer-events:none;">
+          <div class="c-icon">📍</div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Location</span>
+            <span class="contact-item-val">Chelakara, Thrissur, Kerala</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2025 Nima P S · Structural Engineer · Chelakara, Kerala</div>
+  <div class="footer-langs">
+    <span class="lang-badge">English</span>
+    <span class="lang-badge">Hindi</span>
+    <span class="lang-badge">Tamil</span>
+    <span class="lang-badge">Malayalam</span>
+  </div>
+</footer>
+
+<script>
+/* ── CUSTOM CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px';
+  cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,.comp-item,.proj-tag,.lang-badge,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
+});
+
+/* ── PARTICLES ── */
+const canvas=document.getElementById('particle-canvas');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+resize(); window.addEventListener('resize',resize);
+class P{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.35; this.vy=(Math.random()-.5)*.35;
+    this.r=Math.random()*1.4+0.4;
+    this.a=Math.random()*0.45+0.1;
+  }
+  step(){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
+  }
+  draw(){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(99,179,237,${this.a})`;ctx.fill();
+  }
+}
+const pts=[...Array(100)].map(()=>new P());
+function loop(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{p.step();p.draw();});
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(99,179,237,${.09*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+
+/* ── SCROLL REVEAL ── */
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      e.target.style.transitionDelay=`${(i%4)*0.09}s`;
+      e.target.classList.add('visible');
+      revObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+/* ── SKILL BARS ── */
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('animated'),350);
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.4});
+document.querySelectorAll('.skill-bar').forEach(b=>barObs.observe(b));
+
+/* ── COUNTER ANIMATION ── */
+function counter(el){
+  const target=parseFloat(el.dataset.target);
+  const suffix=el.dataset.suffix||'';
+  const isFloat=el.dataset.float==='true';
+  const dur=1800, start=performance.now();
+  (function tick(now){
+    const t=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-t,3);
+    const v=target*ease;
+    el.textContent=(isFloat?v.toFixed(1):Math.floor(v))+suffix;
+    if(t<1)requestAnimationFrame(tick);
+    else el.textContent=(isFloat?target.toFixed(1):target)+suffix;
+  })(start);
+}
+const cntObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){counter(e.target);cntObs.unobserve(e.target);}
+  });
+},{threshold:0.6});
+document.querySelectorAll('.stat-num[data-target]').forEach(c=>cntObs.observe(c));
+
+/* ── ACTIVE NAV ── */
+const secs=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(scrollY>=s.offsetTop-130)cur=s.id;});
+  navAs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+/* ── MAGNETIC CARD TILT ── */
+document.querySelectorAll('.exp-card,.edu-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(900px) rotateY(${x*7}deg) rotateX(${-y*5}deg) translateZ(6px)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transition='transform 0.6s ease';
+    card.style.transform='perspective(900px) rotateY(0) rotateX(0) translateZ(0)';
+    setTimeout(()=>card.style.transition='',600);
+  });
+});
+</script>
+</body>
+</html>
